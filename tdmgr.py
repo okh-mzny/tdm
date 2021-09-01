@@ -38,7 +38,7 @@ from Util.mqtt import MqttClient
 
 # TODO: rework device export
 
-__version__ = "0.2.8"
+__version__ = "0.2.11"
 __tasmota_minimum__ = "6.6.0.17"
 
 
@@ -48,6 +48,8 @@ class MainWindow(QMainWindow):
         self._version = __version__
         self.setWindowIcon(QIcon(":/logo.png"))
         self.setWindowTitle("Tasmota Device Manager {}".format(self._version))
+
+        self.menuBar().setNativeMenuBar(False)
 
         self.unknown = []
         self.env = TasmotaEnvironment()
@@ -86,7 +88,7 @@ class MainWindow(QMainWindow):
             for k in self.devices.childKeys():
                 device.history.append(self.devices.value(k))
             self.devices.endGroup()
-            
+
             self.devices.endGroup()
 
         self.device_model = TasmotaDevicesModel(self.env)
