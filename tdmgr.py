@@ -209,12 +209,25 @@ class MainWindow(QMainWindow):
         if state and self.mqtt.state == self.mqtt.Disconnected:
             self.broker_hostname = self.settings.value('hostname', 'localhost')
             self.broker_port = self.settings.value('port', 1883, int)
+            self.broker_clientId = self.settings.value('clientId')
+            
+            self.broker_sslEnabled = self.settings.value('sslEnabled', False, bool)
+            self.broker_caFile = self.settings.value('caFile')
+            self.broker_clientCertificateFile = self.settings.value('clientCertificateFile')
+            self.broker_clientKeyFile = self.settings.value('clientKeyFile')
+            
             self.broker_username = self.settings.value('username')
             self.broker_password = self.settings.value('password')
 
             self.mqtt.hostname = self.broker_hostname
             self.mqtt.port = self.broker_port
-
+            self.mqtt.clientId = self.broker_clientId
+            
+            self.mqtt.sslEnabled = self.broker_sslEnabled
+            self.mqtt.caFile = self.broker_caFile
+            self.mqtt.clientCertificateFile = self.broker_clientCertificateFile
+            self.mqtt.clientKeyFile = self.broker_clientKeyFile
+ 
             if self.broker_username:
                 self.mqtt.setAuth(self.broker_username, self.broker_password)
             self.mqtt.connectToHost()
@@ -228,13 +241,26 @@ class MainWindow(QMainWindow):
 
     def mqtt_connect(self):
         self.broker_hostname = self.settings.value('hostname', 'localhost')
-        self.broker_port = self.settings.value('port', 1883, int)
+        self.broker_port = self.settings.value('port', 8883, int)
+        self.broker_clientId = self.settings.value('clientId', '')
+
+        self.broker_sslEnabled = self.settings.value('sslEnabled', False, bool)
+        self.broker_caFile = self.settings.value('caFile')
+        self.broker_clientCertificateFile = self.settings.value('clientCertificateFile')
+        self.broker_clientKeyFile = self.settings.value('clientKeyFile')
+        
         self.broker_username = self.settings.value('username')
         self.broker_password = self.settings.value('password')
 
         self.mqtt.hostname = self.broker_hostname
         self.mqtt.port = self.broker_port
-
+        self.mqtt.clientId = self.broker_clientId
+        
+        self.mqtt.sslEnabled = self.broker_sslEnabled
+        self.mqtt.caFile = self.broker_caFile
+        self.mqtt.clientCertificateFile = self.broker_clientCertificateFile
+        self.mqtt.clientKeyFile = self.broker_clientKeyFile
+ 
         if self.broker_username:
             self.mqtt.setAuth(self.broker_username, self.broker_password)
 
@@ -245,12 +271,12 @@ class MainWindow(QMainWindow):
         self.mqtt.disconnectFromHost()
 
     def mqtt_connecting(self):
-        self.statusBar().showMessage("Connecting to broker")
+        self.statusBar().showMessage("Connecting to broker {}:{}".format(self.broker_hostname, self.broker_port))
 
     def mqtt_connected(self):
         self.actToggleConnect.setIcon(QIcon(":/connect.png"))
         self.actToggleConnect.setText("Disconnect")
-        self.statusBar().showMessage("Connected to {}:{} as {}".format(self.broker_hostname, self.broker_port, self.broker_username if self.broker_username else '[anonymous]'))
+        self.statusBar().showMessage("Client {}, connected to {}:{} as {}".format(self.broker_clientId, self.broker_hostname, self.broker_port, self.broker_username if self.broker_username else '[anonymous]'))
 
         self.mqtt_subscribe()
 
