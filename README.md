@@ -30,6 +30,7 @@ While I'm not in any way abandoning this project, I don't have as much time as I
  - selectable views to see the most vital device parameters at a glance
  - BSSID aliasing for larger deployments
  - support for current and legacy Timers payloads (thanks @GrahamM)
+ - support for certificate and credential based authentication over TLS (thanks @homemations)
 
 # Planned functions
   
